@@ -7,7 +7,10 @@ import Layout from '../layouts/Layout.astro';
 		<div id="logo-target" aria-hidden="true"></div>
 	</header>
 	<main>
-		<img id="logo" src="/images/LogoCarga.webp" alt="Logo" />
+		<div id="logo">
+			<img id="logo-ghost" src="/images/LogoCarga.webp" alt="" aria-hidden="true" />
+			<img id="logo-fill" src="/images/LogoCarga.webp" alt="Logo" />
+		</div>
 	</main>
 </Layout>
 
@@ -36,33 +39,70 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	#logo {
-		max-width: min(60vw, 400px);
+		position: relative;
+		width: min(60vw, 400px);
+		will-change: transform;
+	}
+
+	#logo img {
+		width: 100%;
 		height: auto;
 		display: block;
-		will-change: transform;
+	}
+
+	/* ponytail: silueta = misma imagen fantasma, relleno = wipe con clip-path nativo */
+	#logo-ghost {
+		opacity: 0.3;
+	}
+
+	#logo-fill {
+		position: absolute;
+		inset: 0;
+		clip-path: inset(100% 0 0 0);
+		animation: fill-up 1s ease-out forwards;
+	}
+
+	@keyframes fill-up {
+		to {
+			clip-path: inset(0 0 0 0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		#logo-fill {
+			animation: none;
+			clip-path: none;
+		}
 	}
 </style>
 
 <script>
-	const logo = document.getElementById('logo') as HTMLImageElement;
+	const logo = document.getElementById('logo') as HTMLElement;
 	const target = document.getElementById('logo-target') as HTMLElement;
 	// ponytail: WAAPI nativo, sin Tailwind/librerías para una sola animación
-	setTimeout(() => {
-		const first = logo.getBoundingClientRect();
-		const last = target.getBoundingClientRect();
-		const dx = last.left + last.width / 2 - (first.left + first.width / 2);
-		const dy = last.top + last.height / 2 - (first.top + first.height / 2);
-		const s = last.width / first.width;
-		const anim = logo.animate(
-			[
-				{ transform: 'translate(0, 0) scale(1)' },
-				{ transform: `translate(${dx}px, ${dy}px) scale(${s})` },
-			],
-			{ duration: 900, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' },
-		);
-		anim.onfinish = () => {
-			logo.style.transform = `translate(${dx}px, ${dy}px) scale(${s})`;
-			logo.style.transformOrigin = 'center';
-		};
-	}, 1000);
+	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+	setTimeout(
+		() => {
+			const first = logo.getBoundingClientRect();
+			const last = target.getBoundingClientRect();
+			const dx = last.left + last.width / 2 - (first.left + first.width / 2);
+			const dy = last.top + last.height / 2 - (first.top + first.height / 2);
+			const s = last.width / first.width;
+			const end = `translate(${dx}px, ${dy}px) scale(${s})`;
+			if (reduce) {
+				logo.style.transform = end;
+				return;
+			}
+			const anim = logo.animate([{ transform: 'translate(0, 0) scale(1)' }, { transform: end }], {
+				duration: 900,
+				easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+				fill: 'forwards',
+			});
+			anim.onfinish = () => {
+				logo.style.transform = end;
+				logo.style.transformOrigin = 'center';
+			};
+		},
+		reduce ? 0 : 1100,
+	);
 </script>
