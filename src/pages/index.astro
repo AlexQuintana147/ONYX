@@ -436,8 +436,9 @@ import Layout from '../layouts/Layout.astro';
 	/* ponytail: placeholder del tamaño final, el FLIP mide contra esto */
 	#logo-target {
 		width: 120px;
-		height: 40px;
 		flex-shrink: 0;
+		display: flex;
+		align-items: center;
 	}
 
 	/* ponytail: en pantallas chicas solo la hora, sin fecha */
@@ -919,12 +920,15 @@ import Layout from '../layouts/Layout.astro';
 	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 	const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
 	let flight: Animation | null = null;
-	const commitFinal = (end: string) => {
+	const commitFinal = () => {
 		flight?.cancel();
-		logo.style.transform = end;
-		logo.style.transformOrigin = 'center';
-		ghost.style.opacity = '0';
-		fill.style.opacity = '0';
+		// ponytail: el logo vive en el header fijo, así acompaña el scroll
+		target.appendChild(logo);
+		logo.style.transform = 'none';
+		logo.style.width = '120px';
+		ghost.style.display = 'none';
+		fill.style.display = 'none';
+		headerImg.style.position = 'static';
 		headerImg.style.opacity = '1';
 		main.style.backgroundColor = '#e8eaec';
 		document.body.style.backgroundColor = '#e8eaec';
@@ -939,7 +943,7 @@ import Layout from '../layouts/Layout.astro';
 			const s = last.width / first.width;
 			const end = `translate(${dx}px, ${dy}px) scale(${s})`;
 			if (reduce) {
-				commitFinal(end);
+				commitFinal();
 				return;
 			}
 			// ponytail: vuelo + crossfade + fondo en paralelo, el swap ocurre a mitad del vuelo
@@ -971,7 +975,7 @@ import Layout from '../layouts/Layout.astro';
 				easing: EASE,
 				fill: 'forwards',
 			});
-			flight.onfinish = () => commitFinal(end);
+			flight.onfinish = () => commitFinal();
 		},
 		reduce ? 0 : 1100,
 	);
@@ -999,6 +1003,7 @@ import Layout from '../layouts/Layout.astro';
 	// ponytail: si cambia el viewport tras aterrizar, se re-ancla sin animar
 	addEventListener('resize', () => {
 		if (!document.body.classList.contains('ready')) return;
+		if (target.contains(logo)) return;
 		logo.style.transform = 'none';
 		const first = logo.getBoundingClientRect();
 		const last = target.getBoundingClientRect();
