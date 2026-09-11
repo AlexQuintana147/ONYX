@@ -30,6 +30,7 @@ import Layout from '../layouts/Layout.astro';
 		</div>
 	</header>
 	<div id="menu-overlay" aria-hidden="true">
+		<button id="menu-close" type="button" aria-label="Cerrar menú">✕</button>
 		<nav aria-label="Menú">
 			<a href="#">Inicio</a>
 			<a href="#">Servicios</a>
@@ -37,6 +38,13 @@ import Layout from '../layouts/Layout.astro';
 			<a href="#">Nosotros</a>
 						<a href="#">Contacto</a>
 		</nav>
+		<div class="lang">
+			<span>Idioma</span>
+			<button type="button" data-lang="es" aria-pressed="true">Español</button>
+			<button type="button" data-lang="en" aria-pressed="false">English</button>
+			<button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+		</div>
+		<img id="menu-logo" src="/images/LogoCarga.webp" alt="" aria-hidden="true" />
 	</div>
 	<main>
 		<div id="logo">
@@ -158,44 +166,161 @@ import Layout from '../layouts/Layout.astro';
 		cursor: pointer;
 	}
 
+	/* ponytail: dropdown oscuro redondeado bajo el botón; en móvil es sidebar */
 	#menu-overlay {
 		position: fixed;
-		inset: 0;
+		top: 72px;
+		right: 24px;
 		z-index: 40;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		width: 300px;
+		padding: 12px;
+		border-radius: 20px;
 		background: #0b0b0c;
+		color: #fff;
+		font-stretch: 125%;
 		opacity: 0;
 		visibility: hidden;
+		transform: translateY(-8px) scale(0.98);
+		transform-origin: top right;
 		transition:
-			opacity 0.4s ease,
-			visibility 0.4s;
+			opacity 0.35s ease,
+			transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+			visibility 0.35s;
 	}
 
 	#menu-overlay.open {
 		opacity: 1;
 		visibility: visible;
+		transform: none;
 	}
 
+	/* ponytail: en desktop los links ya están en el header, el dropdown es solo idioma */
 	#menu-overlay nav {
-		display: flex;
+		display: none;
 		flex-direction: column;
-		gap: 8px;
-		text-align: center;
-		font-stretch: 125%;
+		gap: 2px;
 	}
 
 	#menu-overlay a {
 		color: #fff;
 		text-decoration: none;
-		font-size: clamp(32px, 6vw, 56px);
-		font-weight: 600;
+		font-size: 15px;
+		font-weight: 500;
+		padding: 10px 14px;
+		border-radius: 12px;
+	}
+
+	#menu-overlay a:hover {
+		background: rgba(255, 255, 255, 0.08);
+	}
+
+	#menu-overlay .lang {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	#menu-overlay .lang span {
+		font-size: 10px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		opacity: 0.55;
+		padding: 4px 14px;
+	}
+
+	#menu-overlay .lang button {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background: transparent;
+		border: 0;
+		color: #fff;
+		font: inherit;
+		font-size: 14px;
+		padding: 10px 14px;
+		border-radius: 12px;
+		cursor: pointer;
+		text-align: left;
+	}
+
+	#menu-overlay .lang button:hover {
+		background: rgba(255, 255, 255, 0.08);
+	}
+
+	/* ponytail: punto = idioma activo, sin iconos externos */
+	#menu-overlay .lang button::after {
+		content: '';
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: transparent;
+	}
+
+	#menu-overlay .lang button[aria-pressed='true']::after {
+		background: #fff;
+	}
+
+	/* ponytail: X y logo solo en sidebar móvil, ocultos en desktop */
+	#menu-close,
+	#menu-logo {
+		display: none;
 	}
 
 	@media (max-width: 900px) {
 		.header-left nav {
 			display: none;
+		}
+
+		#menu-overlay {
+			top: 0;
+			right: 0;
+			bottom: 0;
+			width: min(340px, 88vw);
+			border-radius: 20px 0 0 20px;
+			padding: 96px 20px 20px;
+			transform: translateX(40px);
+		}
+
+		/* ponytail: el sidebar tapa el pill CERRAR del header */
+		#menu-overlay.open {
+			z-index: 60;
+		}
+
+		/* ponytail: en móvil el sidebar trae todo (links + idioma) */
+		#menu-overlay nav {
+			display: flex;
+		}
+
+		#menu-overlay .lang {
+			margin-top: 8px;
+			padding-top: 8px;
+			border-top: 1px solid rgba(255, 255, 255, 0.12);
+		}
+
+		#menu-logo {
+			display: block;
+			position: absolute;
+			right: 20px;
+			bottom: 20px;
+			width: 90px;
+			height: auto;
+		}
+
+		#menu-close {
+			display: flex;
+			position: absolute;
+			top: 24px;
+			right: 20px;
+			width: 40px;
+			height: 40px;
+			align-items: center;
+			justify-content: center;
+			border: 1px solid rgba(255, 255, 255, 0.25);
+			border-radius: 50%;
+			background: transparent;
+			color: #fff;
+			font-size: 16px;
+			cursor: pointer;
 		}
 	}
 
@@ -358,10 +483,23 @@ import Layout from '../layouts/Layout.astro';
 		menuBtn.querySelector('span')!.textContent = open ? 'CERRAR' : 'MENÚ';
 	};
 	menuBtn.addEventListener('click', () => setMenu(!overlay.classList.contains('open')));
+	document.getElementById('menu-close')!.addEventListener('click', () => setMenu(false));
 	overlay.addEventListener('click', (e) => {
 		if ((e.target as HTMLElement).closest('a')) setMenu(false);
 	});
 	addEventListener('keydown', (e) => {
 		if (e.key === 'Escape') setMenu(false);
 	});
+	document.addEventListener('click', (e) => {
+		if (overlay.classList.contains('open') && !(e.target as HTMLElement).closest('#menu-overlay, #menu-btn'))
+			setMenu(false);
+	});
+	// ponytail: solo marca el idioma elegido (lang attr), sin sistema i18n
+	overlay.querySelectorAll('[data-lang]').forEach((btn) =>
+		btn.addEventListener('click', () => {
+			overlay.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+			btn.setAttribute('aria-pressed', 'true');
+			document.documentElement.lang = (btn as HTMLElement).dataset.lang!;
+		}),
+	);
 </script>
