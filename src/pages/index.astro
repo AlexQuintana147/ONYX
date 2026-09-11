@@ -10,6 +10,7 @@ import Layout from '../layouts/Layout.astro';
 		<div id="logo">
 			<img id="logo-ghost" src="/images/LogoCarga.webp" alt="" aria-hidden="true" />
 			<img id="logo-fill" src="/images/LogoCarga.webp" alt="Logo" />
+			<img id="logo-header" src="/images/LogoHeader.webp" alt="" aria-hidden="true" />
 		</div>
 	</main>
 </Layout>
@@ -62,6 +63,13 @@ import Layout from '../layouts/Layout.astro';
 		animation: fill-up 1s ease-out forwards;
 	}
 
+	/* ponytail: LogoHeader apilado invisible, se revela a mitad del vuelo */
+	#logo-header {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+	}
+
 	@keyframes fill-up {
 		to {
 			clip-path: inset(0 0 0 0);
@@ -73,14 +81,41 @@ import Layout from '../layouts/Layout.astro';
 			animation: none;
 			clip-path: none;
 		}
+		#logo-ghost {
+			opacity: 0;
+		}
+		#logo-header {
+			opacity: 1;
+			position: static;
+		}
+		#logo-fill {
+			display: none;
+		}
+		main {
+			background-color: #e8eaec;
+		}
 	}
 </style>
 
 <script>
 	const logo = document.getElementById('logo') as HTMLElement;
 	const target = document.getElementById('logo-target') as HTMLElement;
+	const ghost = document.getElementById('logo-ghost') as HTMLImageElement;
+	const fill = document.getElementById('logo-fill') as HTMLImageElement;
+	const headerImg = document.getElementById('logo-header') as HTMLImageElement;
+	const main = document.querySelector('main') as HTMLElement;
 	// ponytail: WAAPI nativo, sin Tailwind/librerías para una sola animación
 	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+	const commitFinal = (end: string) => {
+		logo.style.transform = end;
+		logo.style.transformOrigin = 'center';
+		ghost.style.opacity = '0';
+		fill.style.opacity = '0';
+		headerImg.style.opacity = '1';
+		main.style.backgroundColor = '#e8eaec';
+		document.body.style.backgroundColor = '#e8eaec';
+	};
 	setTimeout(
 		() => {
 			const first = logo.getBoundingClientRect();
@@ -90,18 +125,39 @@ import Layout from '../layouts/Layout.astro';
 			const s = last.width / first.width;
 			const end = `translate(${dx}px, ${dy}px) scale(${s})`;
 			if (reduce) {
-				logo.style.transform = end;
+				commitFinal(end);
 				return;
 			}
-			const anim = logo.animate([{ transform: 'translate(0, 0) scale(1)' }, { transform: end }], {
+			// ponytail: vuelo + crossfade + fondo en paralelo, el swap ocurre a mitad del vuelo
+			const flight = logo.animate([{ transform: 'translate(0, 0) scale(1)' }, { transform: end }], {
 				duration: 900,
-				easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+				easing: EASE,
 				fill: 'forwards',
 			});
-			anim.onfinish = () => {
-				logo.style.transform = end;
-				logo.style.transformOrigin = 'center';
-			};
+			headerImg.animate([{ opacity: '0' }, { opacity: '1' }], {
+				duration: 700,
+				delay: 200,
+				easing: EASE,
+				fill: 'forwards',
+			});
+			ghost.animate([{ opacity: getComputedStyle(ghost).opacity }, { opacity: '0' }], {
+				duration: 700,
+				delay: 200,
+				easing: EASE,
+				fill: 'forwards',
+			});
+			fill.animate([{ opacity: '1' }, { opacity: '0' }], {
+				duration: 700,
+				delay: 200,
+				easing: EASE,
+				fill: 'forwards',
+			});
+			main.animate([{ backgroundColor: '#025fc5' }, { backgroundColor: '#e8eaec' }], {
+				duration: 900,
+				easing: EASE,
+				fill: 'forwards',
+			});
+			flight.onfinish = () => commitFinal(end);
 		},
 		reduce ? 0 : 1100,
 	);
