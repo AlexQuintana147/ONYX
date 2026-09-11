@@ -660,6 +660,31 @@ import Layout from '../layouts/Layout.astro';
 		}
 	}
 
+	/* ponytail: responsive móvil de secciones */
+	@media (max-width: 640px) {
+		.clock .tz {
+			display: none;
+		}
+
+		.work a {
+			flex-wrap: wrap;
+			row-gap: 10px;
+			padding: 22px 4px;
+		}
+
+		.work .tag {
+			margin-left: 0;
+		}
+
+		.card {
+			padding: 22px;
+		}
+
+		.contact-panel {
+			border-radius: 20px;
+		}
+	}
+
 	#logo {
 		position: relative;
 		width: min(60vw, 400px);
