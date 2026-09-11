@@ -4,8 +4,40 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout>
 	<header>
-		<div id="logo-target" aria-hidden="true"></div>
+		<div class="header-inner">
+			<div class="header-left">
+				<div id="logo-target" aria-hidden="true"></div>
+				<nav class="reveal" aria-label="Principal">
+					<a href="#" class="active">Inicio</a>
+					<a href="#">Servicios</a>
+					<a href="#">Proyectos</a>
+					<a href="#">Nosotros</a>
+										<a href="#">Contacto</a>
+				</nav>
+			</div>
+			<div class="header-right reveal">
+				<div class="clock">
+					<span class="tz">Hora Perú</span>
+					<span id="clock">-- • --</span>
+				</div>
+				<button id="menu-btn" aria-expanded="false" aria-controls="menu-overlay">
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+						<path d="M1 4h14M1 8h14M1 12h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+					</svg>
+					<span>MENÚ</span>
+				</button>
+			</div>
+		</div>
 	</header>
+	<div id="menu-overlay" aria-hidden="true">
+		<nav aria-label="Menú">
+			<a href="#">Inicio</a>
+			<a href="#">Servicios</a>
+			<a href="#">Proyectos</a>
+			<a href="#">Nosotros</a>
+						<a href="#">Contacto</a>
+		</nav>
+	</div>
 	<main>
 		<div id="logo">
 			<img id="logo-ghost" src="/images/LogoCarga.webp" alt="" aria-hidden="true" />
@@ -31,6 +63,140 @@ import Layout from '../layouts/Layout.astro';
 		inset: 0 0 auto 0;
 		padding: 16px 24px;
 		pointer-events: none;
+		z-index: 50;
+		font-family: 'Archivo', 'Helvetica Neue LT Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-stretch: 125%;
+	}
+
+	body.ready header {
+		pointer-events: auto;
+	}
+
+	.header-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 24px;
+	}
+
+	.header-left {
+		display: flex;
+		align-items: center;
+		gap: 32px;
+	}
+
+	.header-left nav {
+		display: flex;
+		gap: 24px;
+	}
+
+	.header-left nav a {
+		position: relative;
+		color: #111;
+		text-decoration: none;
+		font-size: 14px;
+		font-weight: 500;
+	}
+
+	/* ponytail: punto activo como en la referencia, sin librerías */
+	.header-left nav a.active::after {
+		content: '';
+		position: absolute;
+		left: 50%;
+		bottom: -6px;
+		width: 3px;
+		height: 3px;
+		border-radius: 50%;
+		background: currentColor;
+		transform: translateX(-50%);
+	}
+
+	/* ponytail: el header entra cuando termina el vuelo (body.ready) */
+	.reveal {
+		opacity: 0;
+		transform: translateY(-8px);
+		transition:
+			opacity 0.6s ease,
+			transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	body.ready .reveal {
+		opacity: 1;
+		transform: none;
+	}
+
+	.header-right {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+	}
+
+	.clock {
+		text-align: right;
+		font-size: 12px;
+		line-height: 1.3;
+		color: #111;
+	}
+
+	.clock .tz {
+		display: block;
+		font-size: 10px;
+		opacity: 0.55;
+	}
+
+	#menu-btn {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 16px;
+		border: 1px solid #111;
+		border-radius: 999px;
+		background: transparent;
+		color: #111;
+		font-size: 12px;
+		letter-spacing: 0.05em;
+		cursor: pointer;
+	}
+
+	#menu-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: 40;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #0b0b0c;
+		opacity: 0;
+		visibility: hidden;
+		transition:
+			opacity 0.4s ease,
+			visibility 0.4s;
+	}
+
+	#menu-overlay.open {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	#menu-overlay nav {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		text-align: center;
+		font-stretch: 125%;
+	}
+
+	#menu-overlay a {
+		color: #fff;
+		text-decoration: none;
+		font-size: clamp(32px, 6vw, 56px);
+		font-weight: 600;
+	}
+
+	@media (max-width: 900px) {
+		.header-left nav {
+			display: none;
+		}
 	}
 
 	/* ponytail: placeholder del tamaño final, el FLIP mide contra esto */
@@ -115,6 +281,7 @@ import Layout from '../layouts/Layout.astro';
 		headerImg.style.opacity = '1';
 		main.style.backgroundColor = '#e8eaec';
 		document.body.style.backgroundColor = '#e8eaec';
+		document.body.classList.add('ready');
 	};
 	setTimeout(
 		() => {
@@ -161,4 +328,40 @@ import Layout from '../layouts/Layout.astro';
 		},
 		reduce ? 0 : 1100,
 	);
+
+	// ponytail: reloj local vivo + overlay del botón MENU, nativo sin deps
+	const clockEl = document.getElementById('clock') as HTMLElement;
+	const tick = () => {
+		const now = new Date();
+		const time = now.toLocaleTimeString('es-PE', {
+			hour: 'numeric',
+			minute: '2-digit',
+			timeZone: 'America/Lima',
+		});
+		const date = now.toLocaleDateString('es-PE', {
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric',
+			timeZone: 'America/Lima',
+		});
+		clockEl.textContent = `${time} • ${date}`;
+	};
+	tick();
+	setInterval(tick, 10000);
+
+	const menuBtn = document.getElementById('menu-btn') as HTMLButtonElement;
+	const overlay = document.getElementById('menu-overlay') as HTMLElement;
+	const setMenu = (open: boolean) => {
+		overlay.classList.toggle('open', open);
+		overlay.setAttribute('aria-hidden', String(!open));
+		menuBtn.setAttribute('aria-expanded', String(open));
+		menuBtn.querySelector('span')!.textContent = open ? 'CERRAR' : 'MENÚ';
+	};
+	menuBtn.addEventListener('click', () => setMenu(!overlay.classList.contains('open')));
+	overlay.addEventListener('click', (e) => {
+		if ((e.target as HTMLElement).closest('a')) setMenu(false);
+	});
+	addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') setMenu(false);
+	});
 </script>

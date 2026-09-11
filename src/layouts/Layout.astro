@@ -7,6 +7,12 @@
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Astro Basics</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900&display=swap"
+			rel="stylesheet"
+		/>
 	</head>
 	<body>
 		<slot />
@@ -20,5 +26,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: #025fc5;
+		/* ponytail: Archivo Expanded = gemela libre de Helvetica Neue Extended */
+		font-family: 'Archivo', 'Helvetica Neue LT Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	}
 </style>
