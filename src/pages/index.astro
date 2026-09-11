@@ -9,10 +9,10 @@ import Layout from '../layouts/Layout.astro';
 				<div id="logo-target" aria-hidden="true"></div>
 				<nav class="reveal" aria-label="Principal">
 					<a href="#" class="active">Inicio</a>
-					<a href="#">Servicios</a>
-					<a href="#">Proyectos</a>
-					<a href="#">Nosotros</a>
-										<a href="#">Contacto</a>
+					<a href="#servicios">Servicios</a>
+					<a href="#proyectos">Proyectos</a>
+					<a href="#nosotros">Nosotros</a>
+										<a href="#contacto">Contacto</a>
 				</nav>
 			</div>
 			<div class="header-right reveal">
@@ -32,11 +32,11 @@ import Layout from '../layouts/Layout.astro';
 	<div id="menu-overlay" aria-hidden="true">
 		<button id="menu-close" type="button" aria-label="Cerrar menú">✕</button>
 		<nav aria-label="Menú">
-			<a href="#">Inicio</a>
-			<a href="#">Servicios</a>
-			<a href="#">Proyectos</a>
-			<a href="#">Nosotros</a>
-						<a href="#">Contacto</a>
+			<a href="#inicio">Inicio</a>
+			<a href="#servicios">Servicios</a>
+			<a href="#proyectos">Proyectos</a>
+			<a href="#nosotros">Nosotros</a>
+						<a href="#contacto">Contacto</a>
 		</nav>
 		<div class="lang">
 			<span>Idioma</span>
@@ -46,7 +46,7 @@ import Layout from '../layouts/Layout.astro';
 		</div>
 		<img id="menu-logo" src="/images/LogoCarga.webp" alt="" aria-hidden="true" />
 	</div>
-	<main>
+	<main id="inicio">
 		<div id="logo">
 			<img id="logo-ghost" src="/images/LogoCarga.webp" alt="" aria-hidden="true" />
 			<img id="logo-fill" src="/images/LogoCarga.webp" alt="Logo" />
@@ -58,12 +58,93 @@ import Layout from '../layouts/Layout.astro';
 			<h1>Impulsamos tu negocio, <span>con webs a medida</span></h1>
 			<p class="rating"><span aria-hidden="true">★★★★★</span> +150 Clientes</p>
 			<div class="cta">
-				<a class="btn-dark" href="#">Escríbenos <span aria-hidden="true">→</span></a>
-				<a class="btn-light" href="#">Ver Proyectos</a>
+				<a class="btn-dark" href="#contacto">Escríbenos <span aria-hidden="true">→</span></a>
+				<a class="btn-light" href="#proyectos">Ver Proyectos</a>
 			</div>
 		</section>
 		<img id="hero-img" src="/images/hero.webp" alt="Proyectos de la agencia" />
 	</main>
+	<section id="servicios" class="page-section rise">
+		<p class="kicker">| Servicios</p>
+		<h2 class="h2">Todo lo que tu negocio <span>necesita para despegar</span></h2>
+		<div class="cards">
+			<article class="card">
+				<span class="num">01</span>
+				<h3>Desarrollo Web</h3>
+				<p>Páginas rápidas y optimizadas, listas para convertir visitas en clientes.</p>
+				<a href="#contacto">Cotizar →</a>
+			</article>
+			<article class="card">
+				<span class="num">02</span>
+				<h3>Software a Medida</h3>
+				<p>Sistemas y plataformas que automatizan tu operación diaria.</p>
+				<a href="#contacto">Cotizar →</a>
+			</article>
+			<article class="card">
+				<span class="num">03</span>
+				<h3>Apps Móviles</h3>
+				<p>Apps iOS y Android con experiencia fluida y nativa.</p>
+				<a href="#contacto">Cotizar →</a>
+			</article>
+			<article class="card">
+				<span class="num">04</span>
+				<h3>Soporte y SEO</h3>
+				<p>Mantenimiento, posicionamiento y mejora continua de tu web.</p>
+				<a href="#contacto">Cotizar →</a>
+			</article>
+		</div>
+	</section>
+	<section id="proyectos" class="page-section dark rise">
+		<p class="kicker">| Proyectos</p>
+		<h2 class="h2">Trabajo que <span>habla por nosotros</span></h2>
+		<div class="work">
+			<a href="#contacto">
+				<span class="idx">01</span>
+				<h3>Tienda online</h3>
+				<span class="tag">E-commerce</span>
+				<span class="arrow" aria-hidden="true">→</span>
+			</a>
+			<a href="#contacto">
+				<span class="idx">02</span>
+				<h3>Plataforma educativa</h3>
+				<span class="tag">Web App</span>
+				<span class="arrow" aria-hidden="true">→</span>
+			</a>
+			<a href="#contacto">
+				<span class="idx">03</span>
+				<h3>Web corporativa</h3>
+				<span class="tag">Diseño + Desarrollo</span>
+				<span class="arrow" aria-hidden="true">→</span>
+			</a>
+		</div>
+	</section>
+	<section id="nosotros" class="page-section rise">
+		<p class="kicker">| Nosotros</p>
+		<h2 class="h2">Un equipo pequeño, <span>obsesionado con el detalle</span></h2>
+		<div class="about-grid">
+			<p class="lead">
+				Somos Onyx, una agencia de software en Lima. Diseñamos y programamos webs,
+				apps y sistemas que ayudan a negocios reales a vender más y trabajar menos.
+			</p>
+			<div class="stats">
+				<div><strong>5+</strong><span>Años</span></div>
+				<div><strong>200+</strong><span>Proyectos</span></div>
+				<div><strong>150+</strong><span>Clientes</span></div>
+			</div>
+		</div>
+	</section>
+	<section id="contacto" class="page-section">
+		<div class="contact-panel rise">
+			<p class="kicker">| Contacto</p>
+			<h2 class="h2">¿Creamos algo <span>juntos?</span></h2>
+			<a class="btn-white" href="mailto:hola@onyx.pe">Escríbenos</a>
+			<p class="contact-note">Respuesta en menos de 24 horas · Lima, Perú</p>
+		</div>
+	</section>
+	<footer class="footer">
+		<span>© 2026 Onyx — Agencia de Software</span>
+		<span>Lima, Perú</span>
+	</footer>
 </Layout>
 
 <style>
@@ -355,6 +436,217 @@ import Layout from '../layouts/Layout.astro';
 		}
 	}
 
+	/* ponytail: secciones en la misma hoja, sin frameworks */
+	.page-section {
+		padding: clamp(80px, 10vw, 140px) clamp(24px, 6vw, 96px);
+		background: #e8eaec;
+		color: #111;
+		font-stretch: 125%;
+	}
+
+	.kicker {
+		font-size: 13px;
+		font-weight: 500;
+		margin: 0 0 16px;
+	}
+
+	.h2 {
+		font-size: clamp(32px, 4.5vw, 64px);
+		line-height: 1.04;
+		letter-spacing: -0.02em;
+		font-weight: 600;
+		margin: 0;
+		max-width: 18ch;
+	}
+
+	.h2 span {
+		color: #6e7378;
+	}
+
+	.rise {
+		opacity: 0;
+		translate: 0 24px;
+		transition:
+			opacity 0.7s ease,
+			translate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.rise.in {
+		opacity: 1;
+		translate: 0 0;
+	}
+
+	.cards {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		gap: 16px;
+		margin-top: 48px;
+	}
+
+	.card {
+		background: #fff;
+		border-radius: 20px;
+		padding: 28px;
+	}
+
+	.card .num {
+		font-size: 13px;
+		opacity: 0.5;
+	}
+
+	.card h3 {
+		font-size: 20px;
+		font-weight: 600;
+		margin: 40px 0 8px;
+	}
+
+	.card p {
+		font-size: 14px;
+		line-height: 1.6;
+		margin: 0;
+		color: #3c4043;
+	}
+
+	.card a {
+		display: inline-block;
+		margin-top: 20px;
+		font-size: 14px;
+		font-weight: 500;
+		color: #111;
+		text-decoration: none;
+	}
+
+	.dark {
+		background: #0b0b0c;
+		color: #fff;
+	}
+
+	.dark .h2 span {
+		color: #8a8f98;
+	}
+
+	.work {
+		margin-top: 48px;
+		border-top: 1px solid rgba(255, 255, 255, 0.14);
+	}
+
+	.work a {
+		display: flex;
+		align-items: baseline;
+		gap: 16px;
+		padding: 28px 8px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+		color: #fff;
+		text-decoration: none;
+	}
+
+	.work a:hover {
+		background: rgba(255, 255, 255, 0.04);
+	}
+
+	.work .idx {
+		font-size: 13px;
+		opacity: 0.5;
+	}
+
+	.work h3 {
+		font-size: clamp(22px, 3vw, 36px);
+		font-weight: 600;
+		letter-spacing: -0.01em;
+		margin: 0;
+	}
+
+	.work .tag {
+		margin-left: auto;
+		font-size: 12px;
+		white-space: nowrap;
+		border: 1px solid rgba(255, 255, 255, 0.25);
+		border-radius: 999px;
+		padding: 6px 14px;
+	}
+
+	.work .arrow {
+		opacity: 0.6;
+	}
+
+	.about-grid {
+		display: grid;
+		grid-template-columns: 1.2fr 0.8fr;
+		gap: 32px;
+		align-items: start;
+		margin-top: 48px;
+	}
+
+	.about-grid .lead {
+		font-size: clamp(18px, 2vw, 24px);
+		line-height: 1.5;
+		margin: 0;
+	}
+
+	.stats {
+		display: flex;
+		gap: 32px;
+		flex-wrap: wrap;
+	}
+
+	.stats strong {
+		display: block;
+		font-size: clamp(32px, 4vw, 52px);
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+
+	.stats span {
+		font-size: 13px;
+		opacity: 0.6;
+	}
+
+	.contact-panel {
+		background: #0b0b0c;
+		color: #fff;
+		border-radius: 28px;
+		padding: clamp(48px, 7vw, 96px) clamp(24px, 6vw, 80px);
+		text-align: center;
+	}
+
+	.contact-panel .h2 {
+		margin-inline: auto;
+	}
+
+	.contact-panel .btn-white {
+		display: inline-block;
+		margin-top: 32px;
+		background: #fff;
+		color: #111;
+		font-weight: 500;
+		text-decoration: none;
+		padding: 16px 40px;
+		border-radius: 999px;
+	}
+
+	.contact-note {
+		font-size: 13px;
+		opacity: 0.6;
+		margin: 16px 0 0;
+	}
+
+	.footer {
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 12px;
+		padding: 32px clamp(24px, 6vw, 96px);
+		background: #e8eaec;
+		color: #6e7378;
+		font-size: 12px;
+	}
+
+	@media (max-width: 800px) {
+		.about-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
 	#logo {
 		position: relative;
 		width: min(60vw, 400px);
@@ -588,6 +880,11 @@ import Layout from '../layouts/Layout.astro';
 			transform: none;
 			transition: none;
 		}
+		.rise {
+			opacity: 1;
+			translate: none;
+			transition: none;
+		}
 		#hero-img {
 			opacity: 1;
 			transform: none;
@@ -727,4 +1024,23 @@ import Layout from '../layouts/Layout.astro';
 			document.documentElement.lang = (btn as HTMLElement).dataset.lang!;
 		}),
 	);
+
+	// ponytail: reveal on scroll nativo, sin librerías
+	const risers = document.querySelectorAll('.rise');
+	if (reduce) {
+		risers.forEach((el) => el.classList.add('in'));
+	} else {
+		const io = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((e) => {
+					if (e.isIntersecting) {
+						e.target.classList.add('in');
+						io.unobserve(e.target);
+					}
+				});
+			},
+			{ threshold: 0.12 },
+		);
+		risers.forEach((el) => io.observe(el));
+	}
 </script>
