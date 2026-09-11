@@ -3,8 +3,11 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
+	<header>
+		<div id="logo-target" aria-hidden="true"></div>
+	</header>
 	<main>
-		<img src="/images/LogoCarga.webp" alt="Logo" />
+		<img id="logo" src="/images/LogoCarga.webp" alt="Logo" />
 	</main>
 </Layout>
 
@@ -19,9 +22,47 @@ import Layout from '../layouts/Layout.astro';
 		background-color: #025fc5;
 	}
 
-	img {
+	header {
+		position: fixed;
+		inset: 0 0 auto 0;
+		padding: 16px 24px;
+		pointer-events: none;
+	}
+
+	/* ponytail: placeholder del tamaño final, el FLIP mide contra esto */
+	#logo-target {
+		width: 120px;
+		height: 40px;
+	}
+
+	#logo {
 		max-width: min(60vw, 400px);
 		height: auto;
 		display: block;
+		will-change: transform;
 	}
 </style>
+
+<script>
+	const logo = document.getElementById('logo') as HTMLImageElement;
+	const target = document.getElementById('logo-target') as HTMLElement;
+	// ponytail: WAAPI nativo, sin Tailwind/librerías para una sola animación
+	setTimeout(() => {
+		const first = logo.getBoundingClientRect();
+		const last = target.getBoundingClientRect();
+		const dx = last.left + last.width / 2 - (first.left + first.width / 2);
+		const dy = last.top + last.height / 2 - (first.top + first.height / 2);
+		const s = last.width / first.width;
+		const anim = logo.animate(
+			[
+				{ transform: 'translate(0, 0) scale(1)' },
+				{ transform: `translate(${dx}px, ${dy}px) scale(${s})` },
+			],
+			{ duration: 900, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' },
+		);
+		anim.onfinish = () => {
+			logo.style.transform = `translate(${dx}px, ${dy}px) scale(${s})`;
+			logo.style.transformOrigin = 'center';
+		};
+	}, 1000);
+</script>
