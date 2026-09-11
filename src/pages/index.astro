@@ -53,6 +53,15 @@ import Layout from '../layouts/Layout.astro';
 			<img id="logo-header" src="/images/LogoHeader.webp" alt="" aria-hidden="true" />
 		</div>
 		<img id="hero-logo" src="/images/LogoCarga.webp" alt="Onyx" />
+		<section class="hero-copy">
+			<p class="eyebrow">| Desarrollo de Software</p>
+			<h1>Impulsamos tu negocio, <span>con webs a medida</span></h1>
+			<p class="rating"><span aria-hidden="true">★★★★★</span> +150 Clientes</p>
+			<div class="cta">
+				<a class="btn-dark" href="#">Escríbenos <span aria-hidden="true">→</span></a>
+				<a class="btn-light" href="#">Ver Proyectos</a>
+			</div>
+		</section>
 	</main>
 </Layout>
 
@@ -397,6 +406,99 @@ import Layout from '../layouts/Layout.astro';
 		transform: none;
 	}
 
+	/* ponytail: copy derecha estilo referencia, entra con el hero */
+	.hero-copy {
+		position: absolute;
+		left: clamp(24px, 6vw, 96px);
+		top: 50%;
+		translate: 0 -50%;
+		max-width: 480px;
+		z-index: 1;
+		font-stretch: 125%;
+		opacity: 0;
+		transform: translateY(16px);
+		transition:
+			opacity 0.7s ease 0.5s,
+			transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s;
+	}
+
+	body.ready .hero-copy {
+		opacity: 1;
+		transform: none;
+	}
+
+	.hero-copy .eyebrow {
+		font-size: 13px;
+		font-weight: 500;
+		margin: 0 0 12px;
+		color: #111;
+	}
+
+	.hero-copy h1 {
+		font-size: clamp(40px, 5vw, 76px);
+		line-height: 1.02;
+		letter-spacing: -0.02em;
+		font-weight: 600;
+		margin: 0;
+		color: #111;
+	}
+
+	.hero-copy h1 span {
+		color: #6e7378;
+	}
+
+	.hero-copy .rating {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 14px;
+		font-weight: 500;
+		margin: 20px 0 0;
+		color: #111;
+	}
+
+	.hero-copy .rating span {
+		color: #f5a623;
+		letter-spacing: 2px;
+	}
+
+	.hero-copy .cta {
+		display: flex;
+		gap: 12px;
+		margin-top: 28px;
+	}
+
+	.hero-copy .cta a {
+		text-decoration: none;
+		font-size: 14px;
+		font-weight: 500;
+		padding: 14px 28px;
+		border-radius: 999px;
+		white-space: nowrap;
+	}
+
+	.hero-copy .btn-dark {
+		background: #111;
+		color: #fff;
+	}
+
+	.hero-copy .btn-dark span {
+		margin-left: 6px;
+	}
+
+	.hero-copy .btn-light {
+		background: #fff;
+		color: #111;
+	}
+
+	@media (max-width: 1024px) {
+		.hero-copy {
+			left: 24px;
+			right: 24px;
+			max-width: none;
+		}
+	}
+
 	@keyframes fill-up {
 		to {
 			clip-path: inset(0 0 0 0);
@@ -419,6 +521,11 @@ import Layout from '../layouts/Layout.astro';
 			display: none;
 		}
 		#hero-logo {
+			opacity: 1;
+			transform: none;
+			transition: none;
+		}
+		.hero-copy {
 			opacity: 1;
 			transform: none;
 			transition: none;
