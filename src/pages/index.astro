@@ -62,6 +62,7 @@ import Layout from '../layouts/Layout.astro';
 				<a class="btn-light" href="#">Ver Proyectos</a>
 			</div>
 		</section>
+		<img id="hero-img" src="/images/hero.webp" alt="Proyectos de la agencia" />
 	</main>
 </Layout>
 
@@ -499,6 +500,42 @@ import Layout from '../layouts/Layout.astro';
 		}
 	}
 
+	/* ponytail: hero.webp a la derecha, entra con el hero */
+	#hero-img {
+		position: absolute;
+		right: clamp(16px, 4vw, 64px);
+		top: 50%;
+		translate: 0 -50%;
+		width: min(48vw, 840px);
+		height: auto;
+		-webkit-mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+		mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+		z-index: 1;
+		opacity: 0;
+		transform: translateY(16px);
+		transition:
+			opacity 0.7s ease 0.6s,
+			transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.6s;
+	}
+
+	body.ready #hero-img {
+		opacity: 1;
+		transform: none;
+	}
+
+	@media (max-width: 1024px) {
+		#hero-img {
+			left: 24px;
+			right: 24px;
+			top: auto;
+			bottom: 5vh;
+			translate: none;
+			width: auto;
+			max-height: 38vh;
+			object-fit: contain;
+		}
+	}
+
 	@keyframes fill-up {
 		to {
 			clip-path: inset(0 0 0 0);
@@ -526,6 +563,11 @@ import Layout from '../layouts/Layout.astro';
 			transition: none;
 		}
 		.hero-copy {
+			opacity: 1;
+			transform: none;
+			transition: none;
+		}
+		#hero-img {
 			opacity: 1;
 			transform: none;
 			transition: none;
